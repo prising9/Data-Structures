@@ -10,6 +10,9 @@ graph = {	'A' :{ 'B':3, 'C':3},
 			#'H' : {}
 		}
 
+'''
+BFS to find a path from start to end
+'''
 
 def is_connected(graph, start,end):
 	visited = []
