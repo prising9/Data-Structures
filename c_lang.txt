@@ -157,7 +157,6 @@ Function pointer for same	void (*fptr)(struct Student *)
 
 A function pointer array that switches based on some condition
 
-Or, I can quiz you on reading complex declarations if you’re down 😎
 
 🔁 Example: Simple Math Operation Selector
 c
@@ -189,7 +188,6 @@ int main() {
     }
 
 
-🧠 What's Happening Here?
 Code	Meaning
 int (*operations[4])(int, int)	Array of 4 function pointers to int func(int, int)
 operations[choice](x, y)	Calls the appropriate function based on input
@@ -218,4 +216,44 @@ int (*operations[NUM_OPERATIONS])(int, int) = {
 
     if (choice >= 0 && choice < NUM_OPERATIONS) {
         int result = operations[choice](x, y);  // Call selected function
+
+
+
+Great C programming question â€” and a common point of confusion. 
+
+Let's break down the difference between:
+struct node *tab[10];vs
+struct node tab[10];
+
+1. struct node *tab[10];
+This declares:
+An array of 10 pointers to struct node.
+You have 10 elements: tab[0] to tab[9]. Each element is a pointer to a 
+struct node.Useful when you want to point to nodes that are dynamically 
+allocated with malloc().
+
+Example usage:tab[0] = malloc(sizeof(struct node));
+tab[1] = malloc(sizeof(struct node));
+
+
+2. struct node tab[10];
+This declares:
+An array of 10 actual struct node objects.
+
+You have 10 fully allocated struct nodes.
+Memory is allocated statically on the stack (or globally if declared globally).
+No need for malloc().
+
+Example usage:
+tab[0].data = 5;
+tab[1].next = &tab[2];
+
+Key Differences:
+Feature				  What it holds 		Memory allocation 
+struct node *tab[10]  Pointers to nodes		malloc
+struct node tab[10]   Actual nodes			auto-allocate
+
+
+char *lineptr[MAXLINES] 
+lineptr is an array where each element is a pointer to a char.
 
