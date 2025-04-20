@@ -1,0 +1,221 @@
+C interview Q
+
+Postfix format, also called Reverse Polish Notation (RPN), is a mathematical notation where operators are written after their operands, meaning you list the numbers first, then the operation to be performed on them; for example, "2 3 +" would represent "2 + 3" in standard notation. 
+
+
+Example1 − Translate a ∗ d − (b + c) into Postfix form.
+Solution
+ad ∗ bc + −
+
+int member; // int is type specifier, member is declarator
+Int a=1, *p, f(void), *(pf)(double) // p is a pointer to int
+// f declares a function taking void and returning int
+// pf is a pointer to function that takes double and returns int
+
+typedef unsigned int uint;     // Create alias for unsigned int
+
+enum Color { RED, GREEN, BLUE };  // Enum declaration
+enum Color favoriteColor = GREEN; // Variable of enum type
+
+struct Student {
+    int id;
+    char name[50];
+    float gpa;
+};
+
+struct Student s1; // Declaring a variable of that struct
+int numbers[5];              // Array of 5 integers
+char name[20] = "Alice";     // Character array (string)
+
+const makes a variable read-only after initialization.
+
+c
+const int maxScore = 100;       // Integer that can't be changed
+const char *name = "Alice";     // Pointer to a constant string
+char * const ptr = buffer;      // Constant pointer (ptr itself can't change)
+const int * const cp = &value;  // Constant pointer to a constant value
+🔍 Think of:
+
+const int *p → can’t change value being pointed to
+
+int * const p → can’t change the pointer
+
+const int * const p → can’t change either
+
+
+Function pointers are used to store and call functions dynamically.
+
+Example:
+c
+Copy
+Edit
+#include <stdio.h>
+
+void greet() {
+    printf("Hello!\n");
+}
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    void (*fptr1)() = greet;              // Pointer to function returning void
+    int (*fptr2)(int, int) = add;         // Pointer to function taking 2 ints
+
+    fptr1();                              // Calls greet()
+    printf("Sum: %d\n", fptr2(3, 5));     // Calls add(3, 5)
+
+    return 0;
+}
+✅ Useful in callbacks, plugin systems, and embedded development.
+
+
+
+
+
+
+struct Student {
+    int id;
+    char name[50];
+    float gpa;
+};
+
+int main() {
+    struct Student students[3] = {
+        {1, "Alice", 3.9},
+        {2, "Bob", 3.6},
+        {3, "Charlie", 3.8}
+    };
+
+    for (int i = 0; i < 3; i++) {
+        printf("ID: %d, Name: %s, GPA: %.2f\n",
+               students[i].id, students[i].name, students[i].gpa);
+    }
+
+
+
+
+int *ptr;                        // Pointer to int
+int *arr[5];                     // Array of 5 pointers to int
+int (*parr)[5];                  // Pointer to array of 5 ints
+int (*func)(int, float);         // Pointer to function taking (int, float) → int
+int *(*farr[3])(int, char);      // Array of 3 pointers to functions returning int pointers
+
+
+💡 How to Read:
+Use the "spiral rule":
+
+Start from the variable name
+
+Move outwards while respecting parentheses
+
+Use this trick: right-left-right-left
+
+🧠 Example:
+
+c
+Copy
+Edit
+int *(*farr[3])(int, char);
+This is:
+
+farr[3] → an array of 3
+
+*farr[3] → pointers
+
+(*farr[3])(int, char) → to functions taking (int, char)
+
+int * → returning pointer to int
+
+✅ So it's: "array of 3 pointers to functions that take (int, char) and return pointer to int"
+
+
+
+
+Function taking in an array of structures:
+Option 1: Pointer to an array of structs
+c
+void process(struct Student (*arr)[10]);  // pointer to array of 10 Students
+void process(struct Student *arr);        `
+void process(struct Student *arr, int size) {
+struct Student students[3] = { {1, "A"}, {2, "B"}, {3, "C"} };
+process(students, 3);
+
+
+🧠 Bonus: Function pointer taking array of structs
+
+void (*func)(struct Student *arr, int size);  // function pointer
+func = process;
+func(students, 3);
+
+Pointer to array of 10 structs	struct Student (*arr)[10]
+Pointer to first element	struct Student *arr
+Function taking pointer to array	void func(struct Student *arr)
+Function pointer for same	void (*fptr)(struct Student *)
+
+
+A function pointer array that switches based on some condition
+
+Or, I can quiz you on reading complex declarations if you’re down 😎
+
+🔁 Example: Simple Math Operation Selector
+c
+
+
+// Define some functions
+int add(int a, int b)     { return a + b; }
+int subtract(int a, int b){ return a - b; }
+int multiply(int a, int b){ return a * b; }
+int divide(int a, int b)  { return b != 0 ? a / b : 0; }  // Avoid div by 0
+
+int main() {
+    // Array of function pointers
+    int (*operations[4])(int, int) = { add, subtract, multiply, divide };
+
+    int choice;
+    int x = 20, y = 5;
+
+    printf("Select operation:\n");
+    printf("0: Add\n1: Subtract\n2: Multiply\n3: Divide\n");
+    printf("Enter choice: ");
+    scanf("%d", &choice);
+
+    if (choice >= 0 && choice < 4) {
+        int result = operations[choice](x, y);  // Call the selected function
+        printf("Result: %d\n", result);
+    } else {
+        printf("Invalid choice\n");
+    }
+
+
+🧠 What's Happening Here?
+Code	Meaning
+int (*operations[4])(int, int)	Array of 4 function pointers to int func(int, int)
+operations[choice](x, y)	Calls the appropriate function based on input
+{ add, subtract, ... }	Initializes the array with your functions
+
+
+typedef enum {
+    ADD,
+    SUBTRACT,
+    MULTIPLY,
+    DIVIDE,
+    NUM_OPERATIONS  // Keeps count of total operations
+} Operation;
+
+int (*operations[NUM_OPERATIONS])(int, int) = {
+        add,
+        subtract,
+        multiply,
+        divide
+    };
+
+    printf("Select operation:\n");
+    printf("%d: Add\n%d: Subtract\n%d: Multiply\n%d: Divide\n", ADD, SUBTRACT, MULTIPLY, DIVIDE);
+    printf("Enter choice: ");
+    scanf("%d", (int*)&choice);  // Cast needed since scanf can't read into enums directly
+
+    if (choice >= 0 && choice < NUM_OPERATIONS) {
+        int result = operations[choice](x, y);  // Call selected function
+
